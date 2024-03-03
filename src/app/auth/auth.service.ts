@@ -50,6 +50,15 @@ login(username: string, password: string): Observable<any> {
     return this.http.delete(`${this.baseUrl}/${userId}`);
   }
 
-  
+     isLoggedIn(): boolean {
+    // Implémentez votre logique pour vérifier si l'utilisateur est connecté
+    return !!localStorage.getItem('userToken'); // Exemple basique
+  }
+
+  isAdmin(): boolean {
+    // Implémentez votre logique pour vérifier si l'utilisateur est administrateur
+    const userRole = localStorage.getItem('userRole');
+    return userRole === 'Admin'; // Exemple basique
+  }
 
 }
