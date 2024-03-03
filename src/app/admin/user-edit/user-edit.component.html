@@ -1,0 +1,86 @@
+<div class="container mt-4">
+  <h2>Modification de l'Utilisateur</h2>
+  <form (ngSubmit)="onSubmit()">
+    <!-- les champs du formulaire -->
+    <div class="mb-3">
+      <label for="nom">Nom</label>
+      <input
+        type="text"
+        id="nom"
+        [(ngModel)]="user.nom"
+        name="nom"
+        class="form-control"
+      />
+    </div>
+    <div class="mb-3">
+      <label for="prenom" class="form-label">Prénom</label>
+      <input
+        type="text"
+        class="form-control"
+        id="prenom"
+        required
+        [(ngModel)]="user.prenom"
+        name="prenom"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="email" class="form-label">Email</label>
+      <input
+        type="email"
+        class="form-control"
+        id="email"
+        required
+        [(ngModel)]="user.email"
+        name="email"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="role" class="form-label">Rôle</label>
+      <select
+        class="form-select"
+        id="role"
+        required
+        [(ngModel)]="user.role"
+        name="role"
+      >
+        <option value="" disabled>Choisissez un rôle</option>
+        <option value="Admin">Admin</option>
+        <option value="Manager">Manager</option>
+        <option value="Livreur">Livreur</option>
+        <option value="Utilisateur">Utilisateur</option>
+      </select>
+    </div>
+
+    <div class="mb-3">
+      <label for="password" class="form-label"
+        >Nouveau mot de passe (laissez vide si inchangé)</label
+      >
+      <input
+        type="password"
+        class="form-control"
+        id="password"
+        [(ngModel)]="user.password"
+        name="password"
+      />
+    </div>
+
+    <div class="mb-3">
+      <label for="confirmPassword" class="form-label"
+        >Confirmez le nouveau mot de passe</label
+      >
+      <input
+        type="password"
+        class="form-control"
+        id="confirmPassword"
+        [(ngModel)]="confirmPassword"
+        name="confirmPassword"
+      />
+    </div>
+    <button type="submit" class="btn btn-success">Sauvegarder</button>
+    <button type="button" class="btn btn-danger" (click)="onDelete()">
+      Supprimer
+    </button>
+  </form>
+</div>

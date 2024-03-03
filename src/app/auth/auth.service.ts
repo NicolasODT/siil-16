@@ -32,8 +32,11 @@ login(username: string, password: string): Observable<any> {
 
 
   logout(): void {
-    // Supprimer l'utilisateur du stockage local pour se déconnecter
-    localStorage.removeItem('currentUser');
+
+    localStorage.removeItem('userToken');
+    localStorage.removeItem('userId');
+    localStorage.removeItem('userRole');
+    localStorage.removeItem('userName');
   }
 
   register(user: any) {
@@ -58,7 +61,25 @@ login(username: string, password: string): Observable<any> {
   isAdmin(): boolean {
     // Implémentez votre logique pour vérifier si l'utilisateur est administrateur
     const userRole = localStorage.getItem('userRole');
-    return userRole === 'Admin'; // Exemple basique
+    return userRole === 'Admin'; 
+  }
+
+
+
+  getUserById(id: number): Observable<any> {
+    return this.http.get(`${this.baseUrl}/${id}`);
+  }
+
+  getAllUsers(): Observable<any[]> {
+    return this.http.get<any[]>(`${this.baseUrl}`, this.httpOptions);
+  }
+
+  updateUser(id: number, user: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${id}`, user);
+  }
+
+  deleteUser(id: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${id}`);
   }
 
 }
