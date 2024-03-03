@@ -1,7 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { Observable } from 'rxjs';
-import { map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -14,6 +13,15 @@ export class AuthService {
   };
 
   constructor(private http: HttpClient) { }
+
+  getUserProfile(): Observable<any> {
+    const userId = localStorage.getItem('userId'); // Assurez-vous d'avoir stocké l'userId lors de la connexion
+    if (!userId) {
+      throw new Error('User ID not found');
+    }
+    return this.http.get(`${this.baseUrl}/${userId}`, this.httpOptions);
+  }
+  
 
 // AuthService
 login(username: string, password: string): Observable<any> {
@@ -31,4 +39,17 @@ login(username: string, password: string): Observable<any> {
   register(user: any) {
     return this.http.post(`${this.baseUrl}/register`, user);
   }
+
+  updateProfile(user: any) {
+    // Envoyer la requête pour mettre à jour le profil
+    return this.http.put(`${this.baseUrl}/${user.id}`, user);
+  }
+
+  deleteProfile(userId: number) {
+    // Envoyer la requête pour supprimer le compte
+    return this.http.delete(`${this.baseUrl}/${userId}`);
+  }
+
+  
+
 }

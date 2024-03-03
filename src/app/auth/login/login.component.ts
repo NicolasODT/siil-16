@@ -18,6 +18,7 @@ export class LoginComponent {
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
         // Redirection vers la page d'accueil ou tableau de bord après la connexion réussie
+        localStorage.setItem('userId', response.userId.toString());
         localStorage.setItem('userToken', response.token);
         localStorage.setItem('userName', response.nom);
         localStorage.setItem('userRole', response.role);
