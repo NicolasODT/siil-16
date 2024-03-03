@@ -20,7 +20,7 @@ export class LoginComponent {
         // Redirection vers la page d'accueil ou tableau de bord après la connexion réussie
         localStorage.setItem('userToken', response.token);
         localStorage.setItem('userName', response.nom);
-        console.log('Connexion réussie', response);
+        localStorage.setItem('userRole', response.role);
         this.router.navigate(['/home']);
       },
       error: (error) => {
