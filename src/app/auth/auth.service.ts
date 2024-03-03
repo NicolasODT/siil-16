@@ -27,4 +27,8 @@ login(username: string, password: string): Observable<any> {
     // Supprimer l'utilisateur du stockage local pour se déconnecter
     localStorage.removeItem('currentUser');
   }
+
+  register(user: any) {
+    return this.http.post(`${this.baseUrl}/register`, user);
+  }
 }
