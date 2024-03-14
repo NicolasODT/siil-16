@@ -30,8 +30,8 @@ export class AuthService {
         // Vérifiez que la réponse contient le token
         if (response && response.jwtToken) {
           // Stockez l'utilisateur dans le localStorage
-          localStorage.setItem('currentUser', JSON.stringify({ username, jwtToken: response.jwtToken }));
-          this.currentUserSubject.next({ username, jwtToken: response.jwtToken });
+          localStorage.setItem('currentUser', JSON.stringify({ jwtToken: response.jwtToken }));
+          this.currentUserSubject.next({ jwtToken: response.jwtToken });
         }
         return response;
       })
