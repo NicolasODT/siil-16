@@ -1,14 +1,16 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
+import { jwtDecode } from 'jwt-decode';
 
 interface UserProfile {
   id: number | null;
   nom: string;
   prenom: string;
   email: string;
-  password?: string;
   role: string;
+  // Vous ne stockez pas le mot de passe dans le JWT, mais vous aurez besoin de cette propriété pour la mise à jour du mot de passe.
+  password?: string;
 }
 
 @Component({
@@ -22,63 +24,82 @@ export class ProfileComponent implements OnInit {
     nom: '',
     prenom: '',
     email: '',
-    password: '',
-    role: ''
+    role: '',
+    password: ''
   };
   confirmPassword: string = '';
 
   constructor(private authService: AuthService, private router: Router) {}
 
   ngOnInit(): void {
-    this.loadUserProfile();
+    this.loadUserProfileFromToken();
   }
 
-  loadUserProfile(): void {
-    const userId = localStorage.getItem('userId');
-    if (userId) {
-      this.authService.getUserProfile().subscribe({ 
-        next: (userData) => {
-          this.user = userData;
-        },
-        error: (error) => {
-          console.error('Erreur lors du chargement du profil', error);
-        }
-      });
+  loadUserProfileFromToken(): void {
+    const currentUser = localStorage.getItem('currentUser');
+    if (currentUser) {
+      const decodedToken: any = jwtDecode(JSON.parse(currentUser).jwtToken);
+      this.user.id = decodedToken.id;
+      this.user.nom = decodedToken.nom;
+      this.user.prenom = decodedToken.prenom;
+      this.user.email = decodedToken.sub; // Assurez-vous que le token contient ces champs
+      this.user.role = decodedToken.role;
     } else {
-      console.error("L'ID utilisateur n'est pas disponible.");
+      console.error("Les informations de l'utilisateur ne sont pas disponibles.");
     }
   }
+  
 
   onUpdateProfile(): void {
     if (this.user.password && this.user.password !== this.confirmPassword) {
       console.error('Les mots de passe ne correspondent pas.');
       return;
     }
-
-    const updateData = { ...this.user };
-    if (this.user.password === '') {
-      delete updateData.password;
+  
+    // Préparez les données de l'utilisateur pour la mise à jour
+    const updateData: any = { ...this.user };
+    if (!this.user.password) {
+      delete updateData.password; // Si le mot de passe n'est pas fourni, ne l'incluez pas
     }
-
-    this.authService.updateProfile(updateData).subscribe({
-      next: (response) => {
-        console.log('Profil mis à jour', response);
-      },
-      error: (error) => {
-        console.error('Erreur lors de la mise à jour du profil', error);
-      }
-    });
+  
+    // Utilisez l'ID de l'utilisateur du token JWT pour la mise à jour
+    if (this.user.id) {
+      this.authService.updateUser(this.user.id, updateData).subscribe({
+        next: (response) => {
+          console.log('Profil mis à jour', response);
+          // Mise à jour du stockage local si nécessaire ou affichez un message de succès
+        },
+        error: (error) => {
+          console.error('Erreur lors de la mise à jour du profil', error);
+        }
+      });
+    } else {
+      console.error("L'ID utilisateur est null, mise à jour impossible.");
+    }
   }
-
+  
   onDeleteProfile(): void {
-    if (this.user.id === null) {
+    // Assurez-vous que l'utilisateur actuel est bien récupéré à partir du token JWT.
+    const currentUser = localStorage.getItem('currentUser');
+    if (!currentUser) {
+      console.error("Informations de l'utilisateur non disponibles.");
+      return;
+    }
+    
+    // Décodez le token pour obtenir l'ID de l'utilisateur.
+    const decodedToken: any = jwtDecode(JSON.parse(currentUser).jwtToken);
+    const userId = decodedToken.id;
+  
+    if (!userId) {
       console.error("L'ID utilisateur est null, suppression impossible.");
       return;
     }
+  
     if (confirm('Êtes-vous sûr de vouloir supprimer votre compte ?')) {
-      this.authService.deleteProfile(this.user.id).subscribe({
+      this.authService.deleteProfile(userId).subscribe({
         next: (response) => {
           console.log('Compte supprimé', response);
+          localStorage.removeItem('currentUser'); // Assurez-vous de supprimer le token stocké après la suppression du compte.
           this.router.navigate(['/login']);
         },
         error: (error) => {
@@ -87,4 +108,5 @@ export class ProfileComponent implements OnInit {
       });
     }
   }
-}
+  }
+  

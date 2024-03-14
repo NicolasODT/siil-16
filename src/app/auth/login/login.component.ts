@@ -17,18 +17,19 @@ export class LoginComponent {
   onSubmit(): void {
     this.authService.login(this.username, this.password).subscribe({
       next: (response) => {
-        // Redirection vers la page d'accueil ou tableau de bord après la connexion réussie
-        localStorage.setItem('userId', response.userId.toString());
-        localStorage.setItem('userToken', response.token);
-        localStorage.setItem('userName', response.nom);
-        localStorage.setItem('userRole', response.role);
-        this.router.navigate(['/home']);
+        if (response.jwtToken) {
+          // Redirection vers la page d'accueil après une connexion réussie
+          this.router.navigate(['/home']);
+        } else {
+          // En cas d'erreur (token non reçu), afficher un message
+          this.errorMessage = 'Connexion échouée. Veuillez vérifier vos identifiants.';
+        }
       },
-      error: (error) => {
-        // Affichage d'un message d'erreur si la connexion échoue
+      error: error => {
         console.error('Erreur de connexion', error);
         this.errorMessage = 'Nom d’utilisateur ou mot de passe incorrect.';
       }
     });
   }
+
 }

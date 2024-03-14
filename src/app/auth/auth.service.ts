@@ -1,73 +1,70 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
-import { Observable } from 'rxjs';
+import { BehaviorSubject, Observable } from 'rxjs';
+import { map } from 'rxjs/operators';
+import { jwtDecode } from 'jwt-decode'; // Assurez-vous que l'importation est correcte
 
 @Injectable({
   providedIn: 'root'
 })
 export class AuthService {
-  private baseUrl = 'http://localhost:8080/api/utilisateurs'; // Remplacez avec l'URL de votre API
+  private baseUrl = 'http://localhost:8080/api/utilisateurs';
+  private authUrl = `${this.baseUrl}/authenticate`;
+  private currentUserSubject: BehaviorSubject<any>;
+  public currentUser: Observable<any>;
 
-  httpOptions = {
-    headers: new HttpHeaders({ 'Content-Type': 'application/json' })
-  };
+  httpOptions = { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) };
 
-  constructor(private http: HttpClient) { }
-
-  getUserProfile(): Observable<any> {
-    const userId = localStorage.getItem('userId'); // Assurez-vous d'avoir stocké l'userId lors de la connexion
-    if (!userId) {
-      throw new Error('User ID not found');
-    }
-    return this.http.get(`${this.baseUrl}/${userId}`, this.httpOptions);
+  constructor(private http: HttpClient) {
+    this.currentUserSubject = new BehaviorSubject<any>(JSON.parse(localStorage.getItem('currentUser') || '{}'));
+    this.currentUser = this.currentUserSubject.asObservable();
   }
-  
 
-// AuthService
-login(username: string, password: string): Observable<any> {
-  const url = 'http://localhost:8080/api/utilisateurs/login';
-  const body = { email: username, password: password };
-  return this.http.post(url, body, this.httpOptions);
-}
+  public get currentUserValue(): any {
+    return this.currentUserSubject.value;
+  }
 
+  login(username: string, password: string): Observable<any> {
+    return this.http.post<any>(this.authUrl, { username, password }, { headers: new HttpHeaders({ 'Content-Type': 'application/json' }) }).pipe(
+      map(response => {
+        // Vérifiez que la réponse contient le token
+        if (response && response.jwtToken) {
+          // Stockez l'utilisateur dans le localStorage
+          localStorage.setItem('currentUser', JSON.stringify({ username, jwtToken: response.jwtToken }));
+          this.currentUserSubject.next({ username, jwtToken: response.jwtToken });
+        }
+        return response;
+      })
+    );
+  }
 
   logout(): void {
-
-    localStorage.removeItem('userToken');
-    localStorage.removeItem('userId');
-    localStorage.removeItem('userRole');
-    localStorage.removeItem('userName');
+    // Supprimez l'utilisateur du localStorage lors de la déconnexion
+    localStorage.removeItem('currentUser');
+    this.currentUserSubject.next(null);
   }
 
-  register(user: any) {
-    return this.http.post(`${this.baseUrl}/register`, user);
+
+  register(user: any): Observable<any> {
+    return this.http.post(`${this.baseUrl}/register`, user, this.httpOptions);
   }
 
-  updateProfile(user: any) {
-    // Envoyer la requête pour mettre à jour le profil
-    return this.http.put(`${this.baseUrl}/${user.id}`, user);
+  updateProfile(user: any): Observable<any> {
+    return this.http.put(`${this.baseUrl}/${user.id}`, user, this.httpOptions);
   }
 
-  deleteProfile(userId: number) {
-    // Envoyer la requête pour supprimer le compte
-    return this.http.delete(`${this.baseUrl}/${userId}`);
+  deleteProfile(userId: number): Observable<any> {
+    return this.http.delete(`${this.baseUrl}/${userId}`, this.httpOptions);
   }
 
-     isLoggedIn(): boolean {
-    // Implémentez votre logique pour vérifier si l'utilisateur est connecté
-    return !!localStorage.getItem('userToken'); // Exemple basique
+  isLoggedIn(): boolean {
+    const currentUser = this.currentUserValue;
+    return !!currentUser && !!currentUser.jwtToken;
   }
-
-  isAdmin(): boolean {
-    // Implémentez votre logique pour vérifier si l'utilisateur est administrateur
-    const userRole = localStorage.getItem('userRole');
-    return userRole === 'Admin'; 
-  }
-
 
 
   getUserById(id: number): Observable<any> {
-    return this.http.get(`${this.baseUrl}/${id}`);
+    return this.http.get(`${this.baseUrl}/${id}`, this.httpOptions);
   }
 
   getAllUsers(): Observable<any[]> {
@@ -75,11 +72,36 @@ login(username: string, password: string): Observable<any> {
   }
 
   updateUser(id: number, user: any): Observable<any> {
-    return this.http.put(`${this.baseUrl}/${id}`, user);
+    return this.http.put(`${this.baseUrl}/${id}`, user, this.httpOptions);
   }
 
   deleteUser(id: number): Observable<any> {
-    return this.http.delete(`${this.baseUrl}/${id}`);
+    return this.http.delete(`${this.baseUrl}/${id}`, this.httpOptions);
   }
 
+  getUserProfile(id: number): Observable<any> {
+    return this.http.get<any>(`${this.baseUrl}/${id}`, this.httpOptions);
+  }
+
+  
+decodeToken(token: string): any {
+  try {
+    return jwtDecode(token);
+  } catch (Error) {
+    console.error("Erreur lors du décodage du token JWT:", Error);
+    return null;
+  }
 }
+
+isAdmin(): boolean {
+  const currentUser = this.currentUserValue;
+  if (!currentUser || !currentUser.jwtToken) {
+    return false;
+  }
+  const decodedToken = this.decodeToken(currentUser.jwtToken);
+  // Vérifiez que votre token contient bien une propriété définissant le rôle
+  return decodedToken && decodedToken.role === 'Admin';
+}
+}
+
+
