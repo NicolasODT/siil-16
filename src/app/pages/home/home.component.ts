@@ -13,8 +13,8 @@ export class HomeComponent implements OnInit {
     // Assurez-vous que le nom du token dans le localStorage est correct
     const currentUser = localStorage.getItem('currentUser');
     if (currentUser) {
-      const decodedToken: any = jwtDecode(JSON.parse(currentUser).jwtToken);  // Utilisez la clé exacte où se trouve le token JWT
-      this.userName = decodedToken.username;  // Ou 'sub' si c'est ce que contient votre token
+      const decodedToken: any = jwtDecode(JSON.parse(currentUser).jwtToken);  
+      this.userName = decodedToken.username;  
     } else {
       this.userName = null;
     }

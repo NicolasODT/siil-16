@@ -28,6 +28,7 @@ export class UserEditComponent implements OnInit {
       next: (data) => {
         console.log('Utilisateur chargé:', data); // Vous devriez voir l'objet utilisateur ici
         this.user = data;
+        this.user.password = '';
         this.isLoaded = true;
       },
       error: (err) => {

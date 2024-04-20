@@ -3,6 +3,7 @@ import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
 
+
 interface UserProfile {
   id: number | null;
   nom: string;
@@ -42,32 +43,29 @@ export class ProfileComponent implements OnInit {
       this.user.id = decodedToken.id;
       this.user.nom = decodedToken.nom;
       this.user.prenom = decodedToken.prenom;
-      this.user.email = decodedToken.sub; // Assurez-vous que le token contient ces champs
+      this.user.email = decodedToken.sub; 
       this.user.role = decodedToken.role;
     } else {
       console.error("Les informations de l'utilisateur ne sont pas disponibles.");
     }
   }
   
-
   onUpdateProfile(): void {
     if (this.user.password && this.user.password !== this.confirmPassword) {
       console.error('Les mots de passe ne correspondent pas.');
       return;
     }
-  
-    // Préparez les données de l'utilisateur pour la mise à jour
+
     const updateData: any = { ...this.user };
     if (!this.user.password) {
       delete updateData.password; // Si le mot de passe n'est pas fourni, ne l'incluez pas
     }
-  
-    // Utilisez l'ID de l'utilisateur du token JWT pour la mise à jour
+
     if (this.user.id) {
       this.authService.updateUser(this.user.id, updateData).subscribe({
         next: (response) => {
           console.log('Profil mis à jour', response);
-          // Mise à jour du stockage local si nécessaire ou affichez un message de succès
+          this.updateLocalUserData(response); // Supposons que response contienne le nouveau JWT ou les nouvelles données utilisateur
         },
         error: (error) => {
           console.error('Erreur lors de la mise à jour du profil', error);
@@ -76,8 +74,17 @@ export class ProfileComponent implements OnInit {
     } else {
       console.error("L'ID utilisateur est null, mise à jour impossible.");
     }
-  }
-  
+}
+
+// Méthode pour mettre à jour les données de l'utilisateur dans le localStorage
+updateLocalUserData(response: any): void {
+  // Supposons que response contient un nouveau token JWT
+  localStorage.setItem('currentUser', JSON.stringify({ jwtToken: response.jwtToken }));
+
+  this.loadUserProfileFromToken();
+
+}
+
   onDeleteProfile(): void {
     // Assurez-vous que l'utilisateur actuel est bien récupéré à partir du token JWT.
     const currentUser = localStorage.getItem('currentUser');
