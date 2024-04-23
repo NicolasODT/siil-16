@@ -1,6 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, Router } from '@angular/router';
 import { AuthService } from '../../auth/auth.service'; 
+import { ToastrService } from 'ngx-toastr';
+import Swal from 'sweetalert2';
+
 @Component({
   selector: 'app-user-edit',
   templateUrl: './user-edit.component.html',
@@ -14,7 +17,8 @@ export class UserEditComponent implements OnInit {
   constructor(
     private authService: AuthService,
     private route: ActivatedRoute,
-    private router: Router
+    private router: Router,
+    private toastr: ToastrService
   ) { }
   confirmPassword: string = '';
 
@@ -40,34 +44,50 @@ export class UserEditComponent implements OnInit {
   onSubmit(): void {
     console.log('Envoi du formulaire avec l’utilisateur:', this.user); // Vérifiez les données avant l'envoi
     if (this.user.password && this.user.password !== this.confirmPassword) {
-      console.error('Les mots de passe ne correspondent pas.');
-      alert('Les mots de passe ne correspondent pas.');
+      this.toastr.error('Les mots de passe ne correspondent pas.'); // Utilise Toastr ici
       return;
     }
     this.authService.updateUser(this.id, this.user).subscribe({
       next: () => {
-        alert('Utilisateur mis à jour avec succès.');
+        this.toastr.success('Utilisateur mis à jour avec succès.'); // Toastr pour le succès
         this.router.navigate(['/admin/user-management']);
       },
       error: (err) => {
-        console.error('Erreur lors de la mise à jour de l’utilisateur :', err);
+        this.toastr.error('Erreur lors de la mise à jour de l’utilisateur.'); // Toastr pour l'erreur
       }
     });
   }
   
 
   onDelete(): void {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-      this.authService.deleteUser(this.id).subscribe({
-        next: () => {
-          alert('Utilisateur supprimé avec succès.');
-          this.router.navigate(['/admin/user-management']); // Ajustez selon vos routes
-        },
-        error: (err) => {
-          console.error('Erreur lors de la suppression de l’utilisateur :', err);
-          // Gestion de l'erreur
-        }
-      });
-    }
+    Swal.fire({
+      title: 'Êtes-vous sûr?',
+      text: "Vous ne pourrez pas revenir en arrière!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonColor: '#74d856',
+      cancelButtonColor: '#d33',
+      confirmButtonText: 'Oui, supprimez-le!'
+    }).then((result) => {
+      if (result.isConfirmed) {
+        this.authService.deleteUser(this.id).subscribe({
+          next: () => {
+            Swal.fire(
+              'Supprimé!',
+              'L’utilisateur a été supprimé.',
+              'success'
+            );
+            this.router.navigate(['/admin/user-management']);
+          },
+          error: (err) => {
+            Swal.fire(
+              'Erreur!',
+              'Une erreur s’est produite lors de la suppression de l’utilisateur.',
+              'error'
+            );
+          }
+        });
+      }
+    });
   }
 }

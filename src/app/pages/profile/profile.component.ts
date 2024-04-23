@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router';
 import { jwtDecode } from 'jwt-decode';
+import { ToastrService } from 'ngx-toastr';
 
 
 interface UserProfile {
@@ -10,7 +11,6 @@ interface UserProfile {
   prenom: string;
   email: string;
   role: string;
-  // Vous ne stockez pas le mot de passe dans le JWT, mais vous aurez besoin de cette propriété pour la mise à jour du mot de passe.
   password?: string;
 }
 
@@ -30,7 +30,7 @@ export class ProfileComponent implements OnInit {
   };
   confirmPassword: string = '';
 
-  constructor(private authService: AuthService, private router: Router) {}
+  constructor(private authService: AuthService, private router: Router, private toastr: ToastrService ) {}
 
   ngOnInit(): void {
     this.loadUserProfileFromToken();
@@ -50,6 +50,15 @@ export class ProfileComponent implements OnInit {
     }
   }
   
+
+  // Méthode pour mettre à jour les données de l'utilisateur dans le localStorage
+  updateLocalUserData(response: any): void {
+    // Vérifie si le token a changé et le met à jour si c'est le cas
+    localStorage.setItem('currentUser', JSON.stringify({ jwtToken: response.jwtToken }));
+    // Recharge les données utilisateur à partir du nouveau token
+    this.loadUserProfileFromToken();
+  }
+
   onUpdateProfile(): void {
     if (this.user.password && this.user.password !== this.confirmPassword) {
       console.error('Les mots de passe ne correspondent pas.');
@@ -58,32 +67,33 @@ export class ProfileComponent implements OnInit {
 
     const updateData: any = { ...this.user };
     if (!this.user.password) {
-      delete updateData.password; // Si le mot de passe n'est pas fourni, ne l'incluez pas
+      delete updateData.password;
     }
 
     if (this.user.id) {
       this.authService.updateUser(this.user.id, updateData).subscribe({
         next: (response) => {
-          console.log('Profil mis à jour', response);
-          this.updateLocalUserData(response); // Supposons que response contienne le nouveau JWT ou les nouvelles données utilisateur
+          this.toastr.success('Votre profil a été mis à jour avec succès.');
+          // Met à jour les données utilisateur et le JWT stocké si nécessaire
+          if (response.jwtToken) {
+            this.updateLocalUserData(response);
+          }
+  
+          setTimeout(() => {
+            this.router.navigate(['/home']);
+          }, 1600); 
         },
         error: (error) => {
-          console.error('Erreur lors de la mise à jour du profil', error);
+          this.toastr.error('Erreur lors de la mise à jour du profil.');
         }
       });
     } else {
-      console.error("L'ID utilisateur est null, mise à jour impossible.");
+      this.toastr.error("Impossible de mettre à jour le profil, l'ID utilisateur est null.");
     }
-}
+  }
 
-// Méthode pour mettre à jour les données de l'utilisateur dans le localStorage
-updateLocalUserData(response: any): void {
-  // Supposons que response contient un nouveau token JWT
-  localStorage.setItem('currentUser', JSON.stringify({ jwtToken: response.jwtToken }));
 
-  this.loadUserProfileFromToken();
 
-}
 
   onDeleteProfile(): void {
     // Assurez-vous que l'utilisateur actuel est bien récupéré à partir du token JWT.

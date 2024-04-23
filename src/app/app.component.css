@@ -1,0 +1,19 @@
+.app-container {
+  display: flex;
+  flex-direction: row;
+  height: 100vh;
+  background-color: #333;
+}
+
+app-navbar {
+  width: 225px;
+  background-color: #333;
+  color: white;
+  height: 100vh;
+}
+
+.main-content {
+  flex-grow: 1;
+  overflow-y: auto;
+  height: 100vh;
+}

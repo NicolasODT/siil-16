@@ -104,6 +104,13 @@ isAdmin(): boolean {
   // Vérifiez que votre token contient bien une propriété définissant le rôle
   return decodedToken && decodedToken.role === 'Admin';
 }
+
+onLoginPage: boolean = false;
+
+showNavbar(show: boolean) {
+  this.onLoginPage = !show;
+}
+
 }
 
 

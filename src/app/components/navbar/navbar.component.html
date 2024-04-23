@@ -1,38 +1,45 @@
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
-    <a class="navbar-brand" href="#">Siil</a>
-    <button
-      class="navbar-toggler"
-      type="button"
-      data-bs-toggle="collapse"
-      data-bs-target="#navbarNav"
-      aria-controls="navbarNav"
-      aria-expanded="false"
-      aria-label="Toggle navigation"
+<!-- navbar.component.html -->
+<nav *ngIf="!authService.onLoginPage" class="custom-navbar">
+  <div class="navbar-header">
+    <a
+      class="navbar-brand"
+      *ngIf="authService.isLoggedIn()"
+      [routerLink]="['/home']"
     >
-      <span class="navbar-toggler-icon"></span>
-    </button>
-    <div class="collapse navbar-collapse" id="navbarNav">
-      <ul class="navbar-nav">
-        <li class="nav-item" *ngIf="authService.isLoggedIn()">
-          <a class="nav-link" [routerLink]="['/home']">Accueil</a>
-        </li>
-        <li class="nav-item" *ngIf="authService.isLoggedIn()">
-          <a class="nav-link" [routerLink]="['/profil']">Profil</a>
-        </li>
-        <li class="nav-item" *ngIf="authService.isAdmin()">
-          <a class="nav-link" [routerLink]="['/admin/user-management']">Gestion des utilisateurs</a>
-        </li>
-        <li class="nav-item" *ngIf="authService.isAdmin()">
-          <a class="nav-link" [routerLink]="['/register']">Inscription</a>
-        </li>
-        <li class="nav-item" *ngIf="!authService.isLoggedIn()">
-          <a class="nav-link" [routerLink]="['/login']">Connexion</a>
-        </li>
-        <!-- Bouton de déconnexion -->
-        <li class="nav-item" *ngIf="authService.isLoggedIn()">
-          <a class="nav-link" href="#" (click)="logout()">Déconnexion</a>
-        </li>
-      </ul>
-    </div>
-  </nav>
-  
+      <img src="assets/logo/logoNB.png" alt="Siil Logo" class="navbar-logo"
+    /></a>
+    <div class="navbar-divider"></div>
+  </div>
+  <ul class="navbar-nav">
+    <li class="nav-item" *ngIf="authService.isLoggedIn()">
+      <a class="nav-link" [routerLink]="['/home']"
+        ><i class="fas fa-home"></i> Accueil</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="authService.isLoggedIn()">
+      <a class="nav-link" [routerLink]="['/profil']">
+        <i class="fas fa-user"></i>Profil</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="authService.isAdmin()">
+      <a class="nav-link" [routerLink]="['/admin/user-management']"
+        ><i class="fas fa-users-cog"></i>Utilisateurs</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="authService.isAdmin()">
+      <a class="nav-link" [routerLink]="['/register']"
+        ><i class="fas fa-user-plus"></i> Inscription</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="!authService.isLoggedIn()">
+      <a class="nav-link" [routerLink]="['/login']"
+        ><i class="fas fa-sign-in-alt"></i> Connexion</a
+      >
+    </li>
+    <li class="nav-item" *ngIf="authService.isLoggedIn()">
+      <a class="nav-link" href="#" (click)="logout()"
+        ><i class="fas fa-sign-out-alt"></i> Déconnexion</a
+      >
+    </li>
+  </ul>
+</nav>

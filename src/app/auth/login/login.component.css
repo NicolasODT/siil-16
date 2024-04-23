@@ -1,0 +1,147 @@
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #000; /* ou tout autre couleur de fond */
+}
+
+.login-card {
+  width: 34%;
+  padding: 2rem;
+  background-color: #121212; /* Couleur du fond de la carte de connexion */
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  color: #fff; /* Couleur du texte */
+  border: 1px solid #333;
+}
+
+.login-logo {
+  text-align: end;
+}
+
+.login-logo img {
+  width: 50px; /* ou la taille du logo souhaitée */
+  margin-bottom: 1rem;
+}
+
+.login-card h2 {
+  margin-bottom: 0.5rem;
+}
+
+.login-card p {
+  margin-bottom: 2rem;
+  opacity: 0.7;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+.form-group label {
+  display: block;
+  text-align: left;
+  margin-bottom: 0.5rem;
+}
+
+.form-group input {
+  width: 100%;
+  padding: 0.5rem;
+  border-radius: 4px;
+  border: 1px solid #333; /* Couleur de la bordure des champs de saisie */
+  background-color: #222; /* Couleur de fond des champs de saisie */
+  color: #fff; /* Couleur du texte des champs de saisie */
+}
+
+.login-button {
+  width: 100%;
+  padding: 0.5rem;
+  border: none;
+  border-radius: 4px;
+  margin-top: 1rem;
+  background-color: #0b4f25; /* Couleur du bouton de connexion */
+  color: #fff;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.login-button:hover {
+  background-color: #74d856; /* Couleur du bouton de connexion au survol */
+}
+
+.alternative-signin {
+  margin: 1rem 0;
+  font-size: 0.9rem;
+}
+
+.signup-link {
+  margin-top: 1rem;
+  font-size: 0.8rem;
+  text-align: end;
+}
+
+.signup-link a {
+  color: #669179; /* Couleur du lien d'inscription */
+  text-decoration: none;
+}
+
+.signup-link a:hover {
+  color: #74d856;
+}
+
+.login-logo img {
+  height: 50px;
+  width: 50px;
+  vertical-align: middle;
+  filter: invert(100%) contrast(60%);
+}
+
+.login-container {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100vh;
+  background-color: #000;
+}
+
+@media (max-width: 960px) {
+  .login-card {
+    width: 50%;
+  }
+
+  .login-card h2 {
+    font-size: 1.5rem;
+  }
+
+  .signup-link,
+  .alternative-signin {
+    font-size: 0.8rem;
+  }
+}
+
+@media (max-width: 560px) {
+  .login-card {
+    width: 80%;
+  }
+
+  .login-card {
+    padding: 1rem;
+  }
+
+  .login-card h2 {
+    font-size: 1.2rem;
+  }
+
+  .form-group label {
+    font-size: 0.9rem;
+  }
+
+  .login-button {
+    padding: 10px;
+  }
+
+  .signup-link,
+  .alternative-signin {
+    font-size: 0.7rem;
+  }
+}

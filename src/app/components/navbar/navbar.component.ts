@@ -8,10 +8,19 @@ import { Router } from '@angular/router';
   styleUrls: ['./navbar.component.css']
 })
 export class NavbarComponent {
+
+  isDarkTheme = false;
+
   constructor(public authService: AuthService, private router: Router) {}
 
   logout(): void {
     this.authService.logout();
     this.router.navigate(['/login']); // Redirection vers la page de connexion après la déconnexion
   }
+
+
+  toggleTheme(): void {
+    this.isDarkTheme = !this.isDarkTheme;
+  }
+
 }

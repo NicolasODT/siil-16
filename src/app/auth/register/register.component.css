@@ -1,0 +1,77 @@
+.container {
+  max-width: 600px; /* Taille similaire à celle du profil */
+  margin: 5rem auto;
+  padding: 2rem;
+  background-color: #222;
+  border-radius: 8px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 2rem;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+}
+
+.flex-row {
+  display: flex;
+  justify-content: space-between;
+  gap: 14px;
+}
+
+.input-group {
+  flex: 1; /* Laisse chaque groupe de saisie prendre toute la largeur disponible si nécessaire */
+}
+
+.half-width {
+  width: 48%; /* légèrement moins que la moitié pour permettre l'espacement */
+}
+
+.input-group label {
+  display: block;
+  margin-top: 0.7rem;
+  color: #ccc;
+}
+
+.input-group input,
+.input-group select {
+  width: 100%;
+  padding: 10px;
+  background: #333; /* Un peu plus sombre pour le champ de saisie */
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.update-button,
+.button {
+  width: 100%;
+  padding: 10px;
+  background-color: #28a745;
+  border: none;
+  border-radius: 4px;
+  color: #fff;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.button:disabled {
+  background-color: #666;
+}
+
+/* Media query pour ajuster la mise en page sur les petits écrans */
+@media (max-width: 768px) {
+  .flex-row {
+    flex-direction: column;
+  }
+
+  .half-width {
+    width: 100%; /* Chaque champ prend la pleine largeur sur les petits écrans */
+  }
+}

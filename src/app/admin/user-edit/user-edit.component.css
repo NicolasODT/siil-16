@@ -1,0 +1,57 @@
+.container {
+  max-width: 600px;
+  margin: 3rem auto;
+  padding: 2rem;
+  background-color: #222;
+  border-radius: 8px;
+  color: #fff;
+  font-family: Arial, sans-serif;
+}
+
+h2 {
+  text-align: center;
+  margin-bottom: 20px;
+}
+
+.field {
+  margin-bottom: 1rem;
+}
+
+.field label {
+  display: block;
+  margin-bottom: 0.5rem;
+  color: #ccc;
+}
+
+.field input,
+.field select {
+  width: 100%;
+  padding: 10px;
+  background-color: #333;
+  border: 1px solid #444;
+  border-radius: 4px;
+  color: #fff;
+}
+
+.button {
+  color: #fff;
+  width: 100%;
+  padding: 10px;
+  border: none;
+  border-radius: 4px;
+  cursor: pointer;
+  margin-top: 1rem;
+}
+
+.update-button {
+  background-color: #28a745; /* Vert pour l'action de mise à jour */
+}
+
+.delete-button {
+  background-color: #dc3545; /* Rouge pour l'action de suppression */
+}
+
+.update-button:hover,
+.delete-button:hover {
+  opacity: 0.8;
+}

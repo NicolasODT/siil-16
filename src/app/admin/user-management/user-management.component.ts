@@ -1,6 +1,7 @@
 import { Component, OnInit } from '@angular/core';
 import { AuthService } from '../../auth/auth.service';
 import { Router } from '@angular/router'; 
+import Swal from 'sweetalert2';
 
 @Component({
   selector: 'app-user-management',
@@ -26,12 +27,43 @@ export class UserManagementComponent implements OnInit {
     this.router.navigate(['/admin/user-edit', user.id]); // Utilisez router ici
   }
   
-  onDelete(user: any) {
-    if (confirm('Êtes-vous sûr de vouloir supprimer cet utilisateur ?')) {
-      this.authService.deleteUser(user.id).subscribe(() => { // Utilisez deleteUser() de AuthService
-        // Mettez à jour la liste des utilisateurs ou affichez un message
-        this.loadUsers();
-      });
-    }
+  onDelete(user: any): void {
+    Swal.fire({
+      title: 'Êtes-vous sûr?',
+      text: "Cette action est irréversible!",
+      icon: 'warning',
+      showCancelButton: true,
+      confirmButtonText: 'Oui, supprimez-le!',
+      cancelButtonText: 'Non, annulez!',
+      reverseButtons: true
+    }).then((result) => {
+      if (result.value) {
+        this.authService.deleteUser(user.id).subscribe({
+          next: () => {
+            Swal.fire(
+              'Supprimé!',
+              'L’utilisateur a été supprimé avec succès.',
+              'success'
+            );
+            // Recharge la liste des utilisateurs après la suppression
+            this.loadUsers();
+          },
+          error: (err) => {
+            // Affiche une alerte d'erreur si la suppression échoue
+            Swal.fire(
+              'Erreur!',
+              'Une erreur est survenue lors de la suppression. Veuillez réessayer.',
+              'error'
+            );
+          }
+        });
+      } else if (result.dismiss === Swal.DismissReason.cancel) {
+        Swal.fire(
+          'Annulé',
+          'L’utilisateur est en sécurité :)',
+          'error'
+        );
+      }
+    });
   }
-}
+}  
