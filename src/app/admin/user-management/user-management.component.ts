@@ -34,7 +34,7 @@ export class UserManagementComponent implements OnInit {
       icon: 'warning',
       background: '#191919', // fond noir
       color: '#fff', // texte blanc
-      confirmButtonColor: '#0b4f25', // bouton de confirmation vert
+      confirmButtonColor: '#28a745', // bouton de confirmation vert
       cancelButtonColor: '#d33', // bouton d'annulation rouge
       showCancelButton: true,
       confirmButtonText: 'Oui, supprimez-le!',
