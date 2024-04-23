@@ -1,5 +1,5 @@
 <!-- navbar.component.html -->
-<nav *ngIf="!authService.onLoginPage" class="custom-navbar">
+<nav class="custom-navbar">
   <div class="navbar-header">
     <a
       class="navbar-brand"
@@ -37,7 +37,7 @@
       >
     </li>
     <li class="nav-item" *ngIf="authService.isLoggedIn()">
-      <a class="nav-link" href="#" (click)="logout()"
+      <a class="nav-link" (click)="logout()"
         ><i class="fas fa-sign-out-alt"></i> Déconnexion</a
       >
     </li>

@@ -16,8 +16,13 @@ export class AppComponent {
     this.router.events.subscribe(event => {
       if (event instanceof NavigationEnd) {
         // Mettre à jour l'état de showNavbar en fonction de la route actuelle
-        this.showNavbar = !event.url.includes('login');
+        this.updateNavbarVisibility(event.url);
       }
     });
+  }
+
+  updateNavbarVisibility(url: string): void {
+    // Si l'URL contient 'login', la barre de navigation ne doit pas être affichée
+    this.showNavbar = !url.includes('login');
   }
 }

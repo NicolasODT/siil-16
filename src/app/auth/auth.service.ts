@@ -42,6 +42,7 @@ export class AuthService {
     // Supprimez l'utilisateur du localStorage lors de la déconnexion
     localStorage.removeItem('currentUser');
     this.currentUserSubject.next(null);
+    this.onLoginPage = true;
   }
 
 

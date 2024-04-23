@@ -42,10 +42,12 @@ export class LoginComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     // Appelé lorsque le composant est créé
     this.authService.showNavbar(false);
+    this.authService.onLoginPage = true;
   }
 
   ngOnDestroy(): void {
     // Appelé juste avant que le composant ne soit détruit
     this.authService.showNavbar(true);
+    this.authService.onLoginPage = false;
   }
 }
