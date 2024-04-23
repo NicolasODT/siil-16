@@ -32,38 +32,49 @@ export class UserManagementComponent implements OnInit {
       title: 'Êtes-vous sûr?',
       text: "Cette action est irréversible!",
       icon: 'warning',
+      background: '#191919', // fond noir
+      color: '#fff', // texte blanc
+      confirmButtonColor: '#0b4f25', // bouton de confirmation vert
+      cancelButtonColor: '#d33', // bouton d'annulation rouge
       showCancelButton: true,
       confirmButtonText: 'Oui, supprimez-le!',
       cancelButtonText: 'Non, annulez!',
       reverseButtons: true
     }).then((result) => {
-      if (result.value) {
+      if (result.isConfirmed) {
         this.authService.deleteUser(user.id).subscribe({
           next: () => {
-            Swal.fire(
-              'Supprimé!',
-              'L’utilisateur a été supprimé avec succès.',
-              'success'
-            );
+            Swal.fire({
+              title: 'Supprimé!',
+              text: 'L’utilisateur a été supprimé avec succès.',
+              icon: 'success',
+              background: '#191919',
+              color: '#fff',
+              confirmButtonColor: '#0b4f25',
+            });
             // Recharge la liste des utilisateurs après la suppression
             this.loadUsers();
           },
           error: (err) => {
-            // Affiche une alerte d'erreur si la suppression échoue
-            Swal.fire(
-              'Erreur!',
-              'Une erreur est survenue lors de la suppression. Veuillez réessayer.',
-              'error'
-            );
+            Swal.fire({
+              title: 'Erreur!',
+              text: 'Une erreur est survenue lors de la suppression. Veuillez réessayer.',
+              icon: 'error',
+              background: '#191919',
+              color: '#fff',
+              confirmButtonColor: '#d33',
+            });
           }
         });
       } else if (result.dismiss === Swal.DismissReason.cancel) {
-        Swal.fire(
-          'Annulé',
-          'L’utilisateur est en sécurité :)',
-          'error'
-        );
+        Swal.fire({
+          title: 'Annulé',
+          text: 'L’utilisateur est en sécurité :)',
+          icon: 'info',
+          background: '#191919',
+          color: '#fff',
+          confirmButtonColor: '#0b4f25',
+        });
       }
     });
-  }
-}  
+  }}

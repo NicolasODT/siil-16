@@ -64,30 +64,51 @@ export class UserEditComponent implements OnInit {
       title: 'Êtes-vous sûr?',
       text: "Vous ne pourrez pas revenir en arrière!",
       icon: 'warning',
+      background: '#191919', // Utilise la couleur de fond de ton choix
+      color: '#fff', // Utilise la couleur de texte de ton choix
+      buttonsStyling: false, // Désactive le style par défaut des boutons
+      customClass: {
+        confirmButton: 'btn btn-success', // Classe pour le bouton de confirmation
+        cancelButton: 'btn btn-danger' // Classe pour le bouton d'annulation
+      },
       showCancelButton: true,
-      confirmButtonColor: '#74d856',
-      cancelButtonColor: '#d33',
-      confirmButtonText: 'Oui, supprimez-le!'
+      confirmButtonText: 'Oui, supprimez-le!',
+      cancelButtonText: 'Non, annulez!'
     }).then((result) => {
       if (result.isConfirmed) {
         this.authService.deleteUser(this.id).subscribe({
           next: () => {
-            Swal.fire(
-              'Supprimé!',
-              'L’utilisateur a été supprimé.',
-              'success'
-            );
+            Swal.fire({
+              title: 'Supprimé!',
+              text: 'L’utilisateur a été supprimé.',
+              icon: 'success',
+              background: '#191919', // Même couleur de fond que précédemment
+              color: '#fff', // Même couleur de texte que précédemment
+              confirmButtonColor: '#74d856', // Couleur du bouton de succès
+              buttonsStyling: false,
+              customClass: {
+                confirmButton: 'btn btn-success' // Classe pour le bouton de confirmation
+              }
+            });
             this.router.navigate(['/admin/user-management']);
           },
           error: (err) => {
-            Swal.fire(
-              'Erreur!',
-              'Une erreur s’est produite lors de la suppression de l’utilisateur.',
-              'error'
-            );
+            Swal.fire({
+              title: 'Erreur!',
+              text: 'Une erreur s’est produite lors de la suppression de l’utilisateur.',
+              icon: 'error',
+              background: '#191919', // Même couleur de fond que précédemment
+              color: '#fff', // Même couleur de texte que précédemment
+              confirmButtonColor: '#d33', // Couleur du bouton d'erreur
+              buttonsStyling: false,
+              customClass: {
+                confirmButton: 'btn btn-danger' // Classe pour le bouton d'erreur
+              }
+            });
           }
         });
       }
     });
+    
   }
 }
