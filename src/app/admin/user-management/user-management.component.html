@@ -12,9 +12,11 @@
       <div class="table-data">{{ user.prenom }}</div>
       <div class="table-data">{{ user.email }}</div>
       <div class="table-data">
-        <button class="edit-button" (click)="onEdit(user)">Modifier</button>
+        <button class="edit-button" (click)="onEdit(user)">
+          <i class="fas fa-edit"></i>
+        </button>
         <button class="delete-button" (click)="onDelete(user)">
-          Supprimer
+          <i class="fa-solid fa-trash"></i>
         </button>
       </div>
     </div>

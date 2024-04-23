@@ -81,7 +81,7 @@ export class ProfileComponent implements OnInit {
   
           setTimeout(() => {
             this.router.navigate(['/home']);
-          }, 1600); 
+          }, 1000); 
         },
         error: (error) => {
           this.toastr.error('Erreur lors de la mise à jour du profil.');
