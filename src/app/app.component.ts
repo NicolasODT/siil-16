@@ -25,4 +25,6 @@ export class AppComponent {
     // Si l'URL contient 'login', la barre de navigation ne doit pas être affichée
     this.showNavbar = !url.includes('login');
   }
+
+  
 }

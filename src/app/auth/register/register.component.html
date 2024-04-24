@@ -18,7 +18,9 @@
           }"
         />
         <div *ngIf="nom.invalid && (nom.dirty || nom.touched)" class="error">
-          <div *ngIf="nom.errors?.['required']" class="error-text"></div>
+          <div *ngIf="nom.errors?.['required']" class="error-text">
+           
+          </div>
         </div>
       </div>
 
@@ -41,7 +43,9 @@
           *ngIf="prenom.invalid && (prenom.dirty || prenom.touched)"
           class="error"
         >
-          <div *ngIf="prenom.errors?.['required']" class="error-text"></div>
+          <div *ngIf="prenom.errors?.['required']" class="error-text">
+            
+          </div>
         </div>
       </div>
     </div>

@@ -69,7 +69,6 @@ input {
   height: 44px;
 }
 
-
 input.ng-touched.ng-invalid {
   border: 1px solid rgb(206, 70, 70); /* Bordure rouge pour les champs invalides touchés */
 }
@@ -86,6 +85,17 @@ input.ng-touched.ng-valid {
 
 .error-messages {
   margin-top: 10px;
+}
+
+.password-container {
+  position: relative;
+}
+
+.password-container i {
+  position: absolute;
+  right: 10px;
+  top: 10px;
+  cursor: pointer;
 }
 
 /* Media query pour ajuster la mise en page sur les petits écrans */

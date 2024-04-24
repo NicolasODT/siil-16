@@ -20,6 +20,8 @@ export class RegisterComponent {
 
   constructor(private authService: AuthService, private router: Router, private toastr: ToastrService) {}
 
+  
+
   onSubmit(): void {
     // Vérifie si le formulaire est valide et que les mots de passe correspondent
     if (!this.isFormValid()) {
@@ -44,4 +46,10 @@ export class RegisterComponent {
   isFormValid(): boolean {
     return this.confirmPassword === this.user.password;
   }
+
+
+
+
+
+
 }

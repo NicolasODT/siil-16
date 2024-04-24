@@ -23,4 +23,5 @@ export class NavbarComponent {
     this.isDarkTheme = !this.isDarkTheme;
   }
 
+  
 }
