@@ -65,6 +65,12 @@ h2 {
   background-color: #666;
 }
 
+.error-text {
+  color: rgb(206, 70, 70);
+  font-size: 0.85em;
+  margin-top: 5px;
+}
+
 /* Media query pour ajuster la mise en page sur les petits écrans */
 @media (max-width: 768px) {
   .flex-row {
