@@ -1,75 +1,140 @@
 <div class="container">
   <h2>Inscription</h2>
-  <form (ngSubmit)="onSubmit()" #registerForm="ngForm" class="form">
-    <div class="flex-row">
-      <!-- Nom -->
-      <div class="input-group">
-        <label for="nom">Nom</label>
-        <input
-          type="text"
-          id="nom"
-          required
-          [(ngModel)]="user.nom"
-          name="nom"
-        />
-      </div>
-      <!-- Prénom -->
-      <div class="input-group">
-        <label for="prenom">Prénom</label>
-        <input
-          type="text"
-          id="prenom"
-          required
-          [(ngModel)]="user.prenom"
-          name="prenom"
-        />
+  <form (ngSubmit)="onSubmit()" #registerForm="ngForm" novalidate>
+    <div class="input-group">
+      <label for="nom">Nom *</label>
+      <input
+        type="text"
+        id="nom"
+        required
+        [(ngModel)]="user.nom"
+        name="nom"
+        #nom="ngModel"
+      />
+      <div *ngIf="nom.invalid && (nom.dirty || nom.touched)" class="error">
+        <div *ngIf="nom.errors?.['required']" class="error-text">
+          Le nom est requis.
+        </div>
       </div>
     </div>
-    <!-- Email -->
+
     <div class="input-group">
-      <label for="email">Email</label>
+      <label for="prenom">Prénom *</label>
+      <input
+        type="text"
+        id="prenom"
+        required
+        [(ngModel)]="user.prenom"
+        name="prenom"
+        #prenom="ngModel"
+      />
+      <div
+        *ngIf="prenom.invalid && (prenom.dirty || prenom.touched)"
+        class="error"
+      >
+        <div *ngIf="prenom.errors?.['required']" class="error-text">
+          Le prénom est requis.
+        </div>
+      </div>
+    </div>
+
+    <div class="input-group">
+      <label for="email">Email *</label>
       <input
         type="email"
         id="email"
         required
         [(ngModel)]="user.email"
         name="email"
+        #email="ngModel"
+        pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
       />
+      <div
+        *ngIf="email.invalid && (email.dirty || email.touched)"
+        class="error"
+      >
+        <div *ngIf="email.errors?.['required']" class="error-text">
+          L'email est requis.
+        </div>
+        <div *ngIf="email.errors?.['pattern']" class="error-text">
+          L'adresse email n'est pas valide.
+        </div>
+      </div>
     </div>
-    <!-- Mot de passe -->
+
     <div class="input-group">
-      <label for="password">Mot de passe</label>
+      <label for="password">Mot de passe *</label>
       <input
         type="password"
         id="password"
         required
         [(ngModel)]="user.password"
         name="password"
+        #password="ngModel"
+        pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
       />
+      <div
+        *ngIf="password.invalid && (password.dirty || password.touched)"
+        class="error"
+      >
+        <div *ngIf="password.errors?.['required']" class="error-text">
+          Un mot de passe est requis.
+        </div>
+        <div *ngIf="password.errors?.['pattern']" class="error-text">
+          Le mot de passe doit contenir au moins 8 caractères, incluant une
+          majuscule, une minuscule, et un chiffre.
+        </div>
+      </div>
     </div>
-    <!-- Confirmez le mot de passe -->
+
     <div class="input-group">
-      <label for="confirmPassword">Confirmez le mot de passe</label>
+      <label for="confirmPassword">Confirmez le mot de passe *</label>
       <input
         type="password"
         id="confirmPassword"
         required
         [(ngModel)]="confirmPassword"
         name="confirmPassword"
+        #confirmPasswordModel="ngModel"
       />
+      <div *ngIf="confirmPasswordModel.dirty || confirmPasswordModel.touched">
+        <div
+          *ngIf="confirmPasswordModel.errors?.['required']"
+          class="error-text"
+        >
+          La confirmation du mot de passe est requise.
+        </div>
+        <div
+          *ngIf="user.password !== confirmPassword && confirmPassword"
+          class="error-text"
+        >
+          Les mots de passe ne correspondent pas.
+        </div>
+      </div>
     </div>
-    <!-- Rôle -->
+
     <div class="input-group">
-      <label for="role">Rôle</label>
-      <select id="role" required [(ngModel)]="user.role" name="role">
+      <label for="role">Rôle *</label>
+      <select
+        id="role"
+        required
+        [(ngModel)]="user.role"
+        name="role"
+        #role="ngModel"
+      >
         <option value="" disabled selected>Choisissez un rôle</option>
         <option value="Admin">Admin</option>
         <option value="Manager">Manager</option>
         <option value="Livreur">Livreur</option>
         <option value="Utilisateur">Utilisateur</option>
       </select>
+      <div *ngIf="role.invalid && (role.dirty || role.touched)" class="error">
+        <div *ngIf="role.errors?.['required']" class="error-text">
+          Un rôle doit être sélectionné.
+        </div>
+      </div>
     </div>
-    <!-- Bouton de validation -->
+
     <button
       type="submit"
       class="button"
