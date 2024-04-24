@@ -1,43 +1,52 @@
 <div class="container">
   <h2>Inscription</h2>
   <form (ngSubmit)="onSubmit()" #registerForm="ngForm" novalidate>
-    <div class="input-group">
-      <label for="nom">Nom *</label>
-      <input
-        type="text"
-        id="nom"
-        required
-        [(ngModel)]="user.nom"
-        name="nom"
-        #nom="ngModel"
-      />
-      <div *ngIf="nom.invalid && (nom.dirty || nom.touched)" class="error">
-        <div *ngIf="nom.errors?.['required']" class="error-text">
-          Le nom est requis.
+    <div class="flex-row">
+      <!-- Nom -->
+      <div class="input-group" style="flex: 1; margin-right: 10px">
+        <label for="nom">Nom *</label>
+        <input
+          type="text"
+          id="nom"
+          required
+          [(ngModel)]="user.nom"
+          name="nom"
+          #nom="ngModel"
+          [ngClass]="{
+            'is-invalid': nom.invalid && (nom.dirty || nom.touched),
+            'is-valid': nom.valid && nom.touched
+          }"
+        />
+        <div *ngIf="nom.invalid && (nom.dirty || nom.touched)" class="error">
+          <div *ngIf="nom.errors?.['required']" class="error-text"></div>
+        </div>
+      </div>
+
+      <!-- Prénom -->
+      <div class="input-group" style="flex: 1">
+        <label for="prenom">Prénom *</label>
+        <input
+          type="text"
+          id="prenom"
+          required
+          [(ngModel)]="user.prenom"
+          name="prenom"
+          #prenom="ngModel"
+          [ngClass]="{
+            'is-invalid': prenom.invalid && (prenom.dirty || prenom.touched),
+            'is-valid': prenom.valid && prenom.touched
+          }"
+        />
+        <div
+          *ngIf="prenom.invalid && (prenom.dirty || prenom.touched)"
+          class="error"
+        >
+          <div *ngIf="prenom.errors?.['required']" class="error-text"></div>
         </div>
       </div>
     </div>
 
-    <div class="input-group">
-      <label for="prenom">Prénom *</label>
-      <input
-        type="text"
-        id="prenom"
-        required
-        [(ngModel)]="user.prenom"
-        name="prenom"
-        #prenom="ngModel"
-      />
-      <div
-        *ngIf="prenom.invalid && (prenom.dirty || prenom.touched)"
-        class="error"
-      >
-        <div *ngIf="prenom.errors?.['required']" class="error-text">
-          Le prénom est requis.
-        </div>
-      </div>
-    </div>
-
+    <!-- Email -->
     <div class="input-group">
       <label for="email">Email *</label>
       <input
@@ -48,6 +57,10 @@
         name="email"
         #email="ngModel"
         pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,}$"
+        [ngClass]="{
+          'is-invalid': email.invalid && (email.dirty || email.touched),
+          'is-valid': email.valid && email.touched
+        }"
       />
       <div
         *ngIf="email.invalid && (email.dirty || email.touched)"
@@ -62,6 +75,7 @@
       </div>
     </div>
 
+    <!-- Mot de passe -->
     <div class="input-group">
       <label for="password">Mot de passe *</label>
       <input
@@ -72,6 +86,11 @@
         name="password"
         #password="ngModel"
         pattern="^(?=.*[a-z])(?=.*[A-Z])(?=.*\d)[a-zA-Z\d]{8,}$"
+        [ngClass]="{
+          'is-invalid':
+            password.invalid && (password.dirty || password.touched),
+          'is-valid': password.valid && password.touched
+        }"
       />
       <div
         *ngIf="password.invalid && (password.dirty || password.touched)"
@@ -87,6 +106,7 @@
       </div>
     </div>
 
+    <!-- Confirmez le mot de passe -->
     <div class="input-group">
       <label for="confirmPassword">Confirmez le mot de passe *</label>
       <input
@@ -96,6 +116,15 @@
         [(ngModel)]="confirmPassword"
         name="confirmPassword"
         #confirmPasswordModel="ngModel"
+        [ngClass]="{
+          'is-invalid':
+            confirmPasswordModel.invalid ||
+            (user.password !== confirmPassword && confirmPasswordModel.touched),
+          'is-valid':
+            confirmPasswordModel.valid &&
+            user.password === confirmPassword &&
+            confirmPasswordModel.touched
+        }"
       />
       <div *ngIf="confirmPasswordModel.dirty || confirmPasswordModel.touched">
         <div
@@ -113,6 +142,7 @@
       </div>
     </div>
 
+    <!-- Rôle -->
     <div class="input-group">
       <label for="role">Rôle *</label>
       <select
@@ -121,6 +151,10 @@
         [(ngModel)]="user.role"
         name="role"
         #role="ngModel"
+        [ngClass]="{
+          'is-invalid': role.invalid && (role.dirty || role.touched),
+          'is-valid': role.valid && role.touched
+        }"
       >
         <option value="" disabled selected>Choisissez un rôle</option>
         <option value="Admin">Admin</option>
@@ -135,6 +169,7 @@
       </div>
     </div>
 
+    <!-- Bouton de validation -->
     <button
       type="submit"
       class="button"

@@ -65,10 +65,27 @@ h2 {
   background-color: #666;
 }
 
+input {
+  height: 44px;
+}
+
+
+input.ng-touched.ng-invalid {
+  border: 1px solid rgb(206, 70, 70); /* Bordure rouge pour les champs invalides touchés */
+}
+
+input.ng-touched.ng-valid {
+  border: 1px solid #74d856;
+}
+
 .error-text {
   color: rgb(206, 70, 70);
   font-size: 0.85em;
   margin-top: 5px;
+}
+
+.error-messages {
+  margin-top: 10px;
 }
 
 /* Media query pour ajuster la mise en page sur les petits écrans */
