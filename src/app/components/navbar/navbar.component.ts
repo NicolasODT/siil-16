@@ -15,7 +15,7 @@ export class NavbarComponent {
 
   logout(): void {
     this.authService.logout();
-    this.router.navigate(['/login']); // Redirection vers la page de connexion après la déconnexion
+    this.router.navigate(['/login']); 
   }
 
 
